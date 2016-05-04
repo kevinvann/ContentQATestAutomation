@@ -15,15 +15,18 @@ public class TWEInstance {
 
 	private WebDriver driver;
 	private String calculationWindow;
-
+	int port;
+	String server;
 	Robot robot;
-	TestFolders inputFolder;
+	TestFolders testFolder;
 
-	public TWEInstance(int port, String folderPath) throws AWTException {
-		inputFolder = new TestFolders(folderPath);
+	public TWEInstance(String folderPath, String server, int port) throws AWTException {
+		this.port = port;
+		this.server = server;
+		testFolder = new TestFolders(folderPath);
 		robot = new Robot();
 		driver = new InternetExplorerDriver();
-		driver.get("http://twecontentdev1:" + port + "/Twe/welcome.do");
+		driver.get(server + ":" + port + "/Twe/welcome.do");
 	}
 
 
@@ -34,7 +37,7 @@ public class TWEInstance {
 
 	public void goToCalculation() throws InterruptedException {
 		Thread.sleep(800);
-		driver.navigate().to("http://twecontentdev1:8380/Twe/loadComputeTaxAction.do");
+		driver.navigate().to(server + ":" + port + "/Twe/loadComputeTaxAction.do");
 		calculationWindow = driver.getWindowHandle();
 	}
 
@@ -44,11 +47,11 @@ public class TWEInstance {
 		driver.findElement(By.xpath("//a[@id='TAX_CALC_BATCH_IMG']")).sendKeys("\n");
 	}
 
-	public void runInputTests() throws AWTException, InterruptedException {
+	public void runInputTests(int type) throws AWTException, InterruptedException {
 		String inputFilePath;
-		for (int fileIndex = 0; fileIndex < inputFolder.getNumInputItems(); fileIndex++) {
-			inputFilePath = inputFolder.getInputFilePath(fileIndex);
-			if (inputFolder.isCsvFile(inputFilePath)) {
+		for (int fileIndex = 0; fileIndex < testFolder.getNumInputItems(); fileIndex++) {
+			inputFilePath = testFolder.getInputFilePath(fileIndex);
+			if (inputFilePath.endsWith(".csv")) {
 				driver.switchTo().window(calculationWindow);
 				driver.switchTo().frame("body");
 				driver.switchTo().frame("content");
@@ -59,11 +62,11 @@ public class TWEInstance {
 				paste();
 				keyPressEnter();
 				Thread.sleep(800);
-				System.out.println("\nRunning test for " + inputFolder.getInputFileName(fileIndex) + "...");
+				System.out.println("\nRunning test for " + testFolder.getInputFileName(fileIndex) + "...");
 				submitAndWait();
 				Thread.sleep(200);
 				keyPressA();
-				copyOutputFilePathFrom(inputFolder.getInputFileName(fileIndex));
+				copyOutputFilePathFrom(testFolder.getInputFileName(fileIndex), type);
 				Thread.sleep(700);
 				paste();
 				keyPressEnter();
@@ -71,22 +74,60 @@ public class TWEInstance {
 				robot.keyPress(KeyEvent.VK_Y);
 				robot.keyRelease(KeyEvent.VK_Y);
 				Thread.sleep(900);
-				System.out.println("Saved to: " + inputFolder.convertToOutputFilePath(inputFolder.getInputFileName(fileIndex)));
+				System.out.println("Saved to: " + testFolder.convertToOutputFilePath(testFolder.getInputFileName(fileIndex), type));
 
 			} else {
-				System.out.println(inputFolder.getInputFileName(fileIndex) + " is not an input csv file.");
+				System.out.println(testFolder.getInputFileName(fileIndex) + " is not an input csv file.");
 			}
 		}
 		driver.quit();
 	}
+	
+	public void runRegressionTests(int type) throws InterruptedException {
+		String inputFilePath;
+		for (int fileIndex = 0; fileIndex < testFolder.getNumInputItems(); fileIndex++) {
+			inputFilePath = testFolder.getInputFilePath(fileIndex);
+			if (inputFilePath.endsWith(".in.csv")) {
+				driver.switchTo().window(calculationWindow);
+				driver.switchTo().frame("body");
+				driver.switchTo().frame("content");
+				Thread.sleep(800);
+				selectFileUpload();
+				Thread.sleep(200);
+				copyInputFilePath(inputFilePath);
+				paste();
+				keyPressEnter();
+				Thread.sleep(800);
+				System.out.println("\nRunning test for " + testFolder.getInputFileName(fileIndex) + "...");
+				submitAndWait();
+				Thread.sleep(200);
+				keyPressA();
+				copyOutputFilePathFrom(testFolder.getInputFileName(fileIndex), type);
+				Thread.sleep(700);
+				paste();
+				keyPressEnter();
+				Thread.sleep(500);
+				robot.keyPress(KeyEvent.VK_Y);
+				robot.keyRelease(KeyEvent.VK_Y);
+				Thread.sleep(900);
+				System.out.println("Saved to: " + testFolder.convertToOutputFilePath(testFolder.getInputFileName(fileIndex), type));
+
+			} else {
+				System.out.println(testFolder.getInputFileName(fileIndex) + " is not an input csv file.");
+			}
+		}
+		driver.quit();
+	}
+	
+	
 
 	private void keyPressA() {
 		robot.keyPress(KeyEvent.VK_A);
 		robot.keyRelease(KeyEvent.VK_A);
 	}
 
-	private void copyOutputFilePathFrom(String inputFileName) {
-		StringSelection copyOutput = new StringSelection(inputFolder.convertToOutputFilePath(inputFileName));
+	private void copyOutputFilePathFrom(String inputFileName, int type) {
+		StringSelection copyOutput = new StringSelection(testFolder.convertToOutputFilePath(inputFileName, type));
 		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(copyOutput, null);
 	}
 

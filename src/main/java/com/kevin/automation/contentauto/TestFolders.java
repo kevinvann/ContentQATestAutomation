@@ -56,21 +56,34 @@ public class TestFolders {
 		return listOfOutputFiles[outputFileIndex].getName();
 	}
 
-	public String convertToOutputFilePath(String inputFileName) {
+	public String convertToOutputFilePath(String inputFileName, int type) {
 		StringBuffer strBuffer = new StringBuffer(inputFileName);
 		String temp;
+		String typeString[] = { "", "_Ready", "_Entered", "_LCS_Inc_84i", "_LCS_Master_84m", "_LCS_SST_Inc_84ssti" };
+		int index = 0;
+		if (inputFileName.contains("StaticTestSuite")) {
+			for (index = 0; index < 3; index++) {
+				if (getInputFileName(index).endsWith(".in.csv")
+						&& !getInputFileName(index).contains("StaticTestSuite")) {
+					break;
+				}
+			}
+			inputFileName = inputFileName.substring(0, 22) + "_" + getInputFileName(index).substring(0, 12) + ".in.csv";
+		}
+
 		if (inputFileName.substring(inputFileName.length() - 6, inputFileName.length() - 5).matches(".*\\d+.*")) {
 			temp = inputFileName.substring(inputFileName.length() - 6, inputFileName.length() - 4);
-			strBuffer.replace(inputFileName.length() - 9, inputFileName.length(), temp + ".out.csv");
+			strBuffer.replace(inputFileName.length() - 9, inputFileName.length(), temp + ".in.csv");
 			inputFileName = strBuffer.toString();
 		}
 		if (inputFileName.substring(inputFileName.length() - 5).matches(".*\\d+.*")) {
 
 			temp = inputFileName.substring(inputFileName.length() - 5, inputFileName.length() - 4);
-			strBuffer.replace(inputFileName.length() - 8, inputFileName.length(), temp + ".out.csv");
+			strBuffer.replace(inputFileName.length() - 8, inputFileName.length(), temp + ".in.csv");
 			inputFileName = strBuffer.toString();
 		}
-		String outputFilePath = outputFolderPath + "\\" + inputFileName.replace(".in.csv", ".out.csv");
+		String outputFilePath = outputFolderPath + "\\"
+				+ inputFileName.replace(".in.csv", typeString[type] + ".out.csv");
 		return outputFilePath;
 	}
 
@@ -97,37 +110,9 @@ public class TestFolders {
 		return count;
 	}
 
-	public Boolean isInputCsvFile(String inputFilePath) {
-		if (inputFilePath.endsWith(".in.csv")) {
-			return true;
-		} else
-			return false;
-	}
-
-	public Boolean isOutputCsvFile(String outputFilePath) {
-		if (outputFilePath.endsWith(".out.csv")) {
-			return true;
-		} else
-			return false;
-	}
-
-	public Boolean isCsvFile(String outputFilePath) {
-		if (outputFilePath.endsWith(".csv")) {
-			return true;
-		} else
-			return false;
-	}
-
-	public Boolean isReducedCsvFile(String outputFilePath) {
-		if (outputFilePath.endsWith("_Reduced.csv")) {
-			return true;
-		} else
-			return false;
-	}
-
 	public void moveReducedFiles() throws IOException {
 		for (int y = 0; y < getNumOutputItems(); y++) {
-			if (isReducedCsvFile(getOutputFilePath(y))) {
+			if (getOutputFilePath(y).endsWith("_Reduced.csv")) {
 				Files.move(Paths.get(getOutputFilePath(y)), Paths.get(convertToReducedFilePath(getOutputFileName(y))),
 						StandardCopyOption.REPLACE_EXISTING);
 			}

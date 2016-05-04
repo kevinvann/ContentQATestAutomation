@@ -35,8 +35,8 @@ public class FileShrinker {
 
 		for (int i = 0; i < outputFolder.getNumOutputItems(); i++) {
 			outputFilePath = outputFolder.getOutputFilePath(i);
-			if (outputFolder.isCsvFile(outputFilePath)
-					&& !outputFolder.isReducedCsvFile(outputFilePath)) {
+			if (outputFilePath.endsWith(".csv")
+					&& !outputFilePath.endsWith("_Reduced.csv")) {
 				keyPressEnter();
 				copyOutputFilePath(outputFilePath);
 				Thread.sleep(500);

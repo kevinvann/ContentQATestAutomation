@@ -30,6 +30,8 @@ public class GUI {
 	private JTextField textFieldDate;
 	private JTextField textFieldGenPath;
 	private JTextField textFieldTWE;
+	private JTextField textFieldServer;
+	private JTextField textFieldPort;
 
 	/**
 	 * Launch the application.
@@ -112,14 +114,9 @@ public class GUI {
 		tabbedPane.addTab("Functional", null, panelFunctional, null);
 		panelFunctional.setLayout(null);
 
-		JLabel lblTweInstance = new JLabel("TWE Instance:");
-		lblTweInstance.setBounds(12, 35, 84, 16);
-		panelFunctional.add(lblTweInstance);
-
-		final JComboBox tweInstanceCombo = new JComboBox();
-		tweInstanceCombo.setBounds(12, 54, 163, 22);
-		panelFunctional.add(tweInstanceCombo);
-		tweInstanceCombo.setModel(new DefaultComboBoxModel(new String[] { "TWE A", "TWE B" }));
+		JLabel lblTweServer = new JLabel("TWE Server:");
+		lblTweServer.setBounds(12, 35, 84, 16);
+		panelFunctional.add(lblTweServer);
 
 		final JLabel lblTaxType = new JLabel("Tax Type:");
 		lblTaxType.setBounds(12, 89, 58, 16);
@@ -142,6 +139,20 @@ public class GUI {
 		JButton moveReducedButton = new JButton("Move Reduced Files");
 		moveReducedButton.setBounds(216, 107, 145, 25);
 		panelFunctional.add(moveReducedButton);
+
+		textFieldServer = new JTextField();
+		textFieldServer.setBounds(12, 54, 106, 22);
+		panelFunctional.add(textFieldServer);
+		textFieldServer.setColumns(10);
+
+		textFieldPort = new JTextField();
+		textFieldPort.setBounds(130, 54, 45, 22);
+		panelFunctional.add(textFieldPort);
+		textFieldPort.setColumns(10);
+
+		JLabel lblPort = new JLabel("Port:");
+		lblPort.setBounds(130, 35, 56, 16);
+		panelFunctional.add(lblPort);
 		moveReducedButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -190,16 +201,10 @@ public class GUI {
 				if (!new File(folderPath + "\\" + testTypeCombo.getSelectedItem().toString()).exists()) {
 					JOptionPane.showMessageDialog(frmContentQaTesting, "Invalid Directory");
 				} else {
-					int port = 0;
-					if (tweInstanceCombo.getSelectedItem().toString().compareTo("TWE A") == 0) {
-						port = 8380;
-					} else if (tweInstanceCombo.getSelectedItem().toString().compareTo("TWE B") == 0) {
-						port = 8480;
-					}
 					TWEInstance tweInstance1 = null;
 					try {
-						tweInstance1 = new TWEInstance(port,
-								folderPath + "\\" + testTypeCombo.getSelectedItem().toString());
+						tweInstance1 = new TWEInstance(folderPath + "\\" + testTypeCombo.getSelectedItem().toString(),
+								textFieldServer.getText(), Integer.parseInt(textFieldPort.getText()));
 					} catch (AWTException e) {
 						e.printStackTrace();
 					}
@@ -211,7 +216,7 @@ public class GUI {
 					}
 					tweInstance1.goToBatchCalculation();
 					try {
-						tweInstance1.runInputTests();
+						tweInstance1.runInputTests(0);
 					} catch (AWTException e) {
 						e.printStackTrace();
 					} catch (InterruptedException e) {
@@ -229,11 +234,14 @@ public class GUI {
 
 		JButton btnCreateCriterionTest = new JButton("Create Criterion Test");
 		btnCreateCriterionTest.addActionListener(new ActionListener() {
-			TWEGenerator tweGen;
-
 			public void actionPerformed(ActionEvent e) {
-				if (textFieldDate.getText().equals("") || textFieldTWE.getText().equals("") || !new File(folderPath + "\\Regression\\Criterion Tests\\Inputs").exists()) {
+				TWEGenerator tweGen = null;
+				if (textFieldDate.getText().equals("") || textFieldTWE.getText().equals("")) {
 					JOptionPane.showMessageDialog(frmContentQaTesting, "Please enter required fields");
+				} else if (!new File(folderPath + "\\Regression\\Criterion Tests\\Inputs").exists()) {
+					JOptionPane.showMessageDialog(frmContentQaTesting, "Invalid test folder");
+				} else if (!new File(genPath + "\\TWE Generator V.4.exe").exists()) {
+					JOptionPane.showMessageDialog(frmContentQaTesting, "Could not find Tax Generator");
 				} else {
 					try {
 						tweGen = new TWEGenerator(genPath);
@@ -250,7 +258,6 @@ public class GUI {
 				}
 			}
 		});
-
 		btnCreateCriterionTest.setBounds(12, 133, 184, 25);
 		panelRegression.add(btnCreateCriterionTest);
 
@@ -274,12 +281,64 @@ public class GUI {
 		panelRegression.add(btnBrowseGenPath);
 
 		JButton btnLoadEntered = new JButton("Load Entered");
+		btnLoadEntered.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (!new File(folderPath + "\\Regression\\Criterion Tests").exists()) {
+					JOptionPane.showMessageDialog(frmContentQaTesting, "Invalid Directory");
+				} else {
+					TWEInstance tweInstance1 = null;
+					try {
+						tweInstance1 = new TWEInstance(folderPath + "\\Regression\\Criterion Tests", "twecontentdev1", 8380);
+					} catch (AWTException e) {
+						e.printStackTrace();
+					}
+					tweInstance1.logIn();
+					try {
+						tweInstance1.goToCalculation();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					tweInstance1.goToBatchCalculation();
+					try {
+						tweInstance1.runRegressionTests(2);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					JOptionPane.showMessageDialog(frmContentQaTesting, "Test Loading Complete");
+				}
+
+			}
+		});
 		btnLoadEntered.setBounds(248, 119, 128, 25);
 		panelRegression.add(btnLoadEntered);
 
 		JButton btnLoadReady = new JButton("Load Ready");
 		btnLoadReady.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				if (!new File(folderPath + "\\Regression\\Criterion Tests").exists()) {
+					JOptionPane.showMessageDialog(frmContentQaTesting, "Invalid Directory");
+				} else {
+					TWEInstance tweInstance1 = null;
+					try {
+						tweInstance1 = new TWEInstance(folderPath + "\\Regression\\Criterion Tests", "twecontentdev1", 8380);
+					} catch (AWTException e) {
+						e.printStackTrace();
+					}
+					tweInstance1.logIn();
+					try {
+						tweInstance1.goToCalculation();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					tweInstance1.goToBatchCalculation();
+					try {
+						tweInstance1.runRegressionTests(1);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					JOptionPane.showMessageDialog(frmContentQaTesting, "Test Loading Complete");
+				}
+
 			}
 		});
 		btnLoadReady.setBounds(248, 91, 128, 25);
@@ -288,6 +347,7 @@ public class GUI {
 		JButton btnLoadPrevious = new JButton("Load Previous");
 		btnLoadPrevious.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+
 			}
 		});
 		btnLoadPrevious.setBounds(248, 147, 128, 25);
