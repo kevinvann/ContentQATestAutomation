@@ -26,7 +26,7 @@ public class TWEInstance {
 		testFolder = new TestFolders(folderPath);
 		robot = new Robot();
 		driver = new InternetExplorerDriver();
-		driver.get(server + ":" + port + "/Twe/welcome.do");
+		driver.get("http://" + server + ":" + port + "/Twe/welcome.do");
 	}
 
 
@@ -36,8 +36,8 @@ public class TWEInstance {
 	}
 
 	public void goToCalculation() throws InterruptedException {
-		Thread.sleep(800);
-		driver.navigate().to(server + ":" + port + "/Twe/loadComputeTaxAction.do");
+		Thread.sleep(1300);
+		driver.navigate().to("http://" + server + ":" + port + "/Twe/loadComputeTaxAction.do");
 		calculationWindow = driver.getWindowHandle();
 	}
 
