@@ -73,19 +73,19 @@ public class GUI {
 		frmContentQaTesting = new JFrame();
 		frmContentQaTesting.setResizable(false);
 		frmContentQaTesting.setBounds(new Rectangle(2000, 100, 394, 351));
-		frmContentQaTesting.setTitle("Content QA Testing Automation");
+		frmContentQaTesting.setTitle("TWE Automation");
 		frmContentQaTesting.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frmContentQaTesting.getContentPane().setLayout(null);
 
-		final JButton browseButton = new JButton("Browse");
-		browseButton.setBounds(12, 275, 96, 29);
-		frmContentQaTesting.getContentPane().add(browseButton);
-		browseButton.addActionListener(new ActionListener() {
+		final JButton btnBrowseTestFolder = new JButton("Browse");
+		btnBrowseTestFolder.setBounds(12, 275, 96, 29);
+		frmContentQaTesting.getContentPane().add(btnBrowseTestFolder);
+		btnBrowseTestFolder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser fileChooser = new JFileChooser();
 				fileChooser.setCurrentDirectory(new File("C:\\Users\\kevin.vann\\Desktop"));
 				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-				int response = fileChooser.showOpenDialog(browseButton);
+				int response = fileChooser.showOpenDialog(btnBrowseTestFolder);
 				if (response == JFileChooser.APPROVE_OPTION) {
 					folderPath = fileChooser.getSelectedFile().toString();
 					lblTweVersion.setText("v" + fileChooser.getSelectedFile().getName().substring(0, 4));
@@ -239,7 +239,7 @@ public class GUI {
 		tabbedPane.addTab("Regression", null, panelRegression, null);
 		panelRegression.setLayout(null);
 
-		JButton btnCreateCriterionTest = new JButton("Create Criterion Test");
+		JButton btnCreateCriterionTest = new JButton("Create Criterion Tests");
 		btnCreateCriterionTest.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				TWEGenerator tweGen = null;
@@ -248,7 +248,7 @@ public class GUI {
 				} else if (!new File(folderPath + "\\Regression\\Criterion Tests\\Inputs").exists()) {
 					JOptionPane.showMessageDialog(frmContentQaTesting, "Invalid test folder");
 				} else if (!new File(genPath + "\\TWE Generator V.4.exe").exists()) {
-					JOptionPane.showMessageDialog(frmContentQaTesting, "Could not find Tax Generator");
+					JOptionPane.showMessageDialog(frmContentQaTesting, "Could not find 'Tax Generator V.4.exe'");
 				} else {
 					try {
 						tweGen = new TWEGenerator(genPath);

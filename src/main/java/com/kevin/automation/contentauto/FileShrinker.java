@@ -57,6 +57,8 @@ public class FileShrinker {
 		keyPressAltF4();
 	}
 
+	
+	
 	private void keyPressEnter() {
 		robot.keyPress(KeyEvent.VK_ENTER);
 		robot.keyRelease(KeyEvent.VK_ENTER);
