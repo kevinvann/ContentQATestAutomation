@@ -287,7 +287,7 @@ public class GUI {
 		btnBrowseGenPath.setBounds(337, 45, 36, 25);
 		panelRegression.add(btnBrowseGenPath);
 
-		JButton btnLoadEntered = new JButton("Load Entered");
+		JButton btnLoadEntered = new JButton("Load Ready");
 		btnLoadEntered.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				loadRegressionTest("twecontentdev1", 8380, 1);
@@ -296,7 +296,7 @@ public class GUI {
 		btnLoadEntered.setBounds(255, 113, 118, 25);
 		panelRegression.add(btnLoadEntered);
 
-		JButton btnLoadReady = new JButton("Load Ready");
+		JButton btnLoadReady = new JButton("Load Entered");
 		btnLoadReady.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				loadRegressionTest("twecontentdev1", 8380, 2);

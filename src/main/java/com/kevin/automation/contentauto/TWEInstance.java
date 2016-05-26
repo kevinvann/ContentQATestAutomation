@@ -140,7 +140,7 @@ public class TWEInstance {
 
 	private void submitAndWait() throws InterruptedException {
 		driver.findElement(By.xpath("//input[@class='buttonred']")).click();
-
+		Thread.sleep(500);
 		while (driver.getPageSource().length() > 0) {
 			Thread.sleep(1000);
 		}
