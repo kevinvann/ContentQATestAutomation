@@ -261,7 +261,11 @@ public class GUI {
 					} catch (InterruptedException e1) {
 						e1.printStackTrace();
 					}
-					tweGen.createCriterionTests(textFieldDate.getText(), textFieldTWE.getText());
+					try {
+						tweGen.createCriterionTests(textFieldDate.getText(), textFieldTWE.getText(), folderPath + "\\Regression\\Criterion Tests\\Inputs");
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
 				}
 			}
 		});

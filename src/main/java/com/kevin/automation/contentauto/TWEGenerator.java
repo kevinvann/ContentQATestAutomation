@@ -5,15 +5,21 @@ import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 public class TWEGenerator {
 	private String folderPath;
 	private Robot robot;
+	File tweFolder;
 
 	public TWEGenerator(String folderPath) throws AWTException {
 		this.folderPath = folderPath;
 		robot = new Robot();
+		tweFolder = new File(folderPath);
 	}
 
 	public void openGenerator() {
@@ -24,7 +30,7 @@ public class TWEGenerator {
 		}
 	}
 
-	public void createCriterionTests(String date, String version) {
+	public void createCriterionTests(String date, String version, String criterionInPath) throws IOException {
 
 		ctrlTab();
 
@@ -54,7 +60,19 @@ public class TWEGenerator {
 		keyPressEnter();
 		keyPressTab(1);
 		keyPressEnter();
-		
+
+		int x = 0;
+		for (int i = 0; i < tweFolder.listFiles().length ; i++) {
+			System.out.println(tweFolder.list()[i].toString());
+			if (tweFolder.list()[i].toString().startsWith(date) && x < 10) {
+				System.out.println(x);
+				Files.copy(
+						Paths.get(tweFolder.listFiles()[i].toString()), Paths.get(criterionInPath + "\\" + date.toUpperCase()
+								+ "_TWE" + version + "_Criterion_" + x + ".in.csv"),
+						StandardCopyOption.REPLACE_EXISTING);
+				x++;
+			}
+		}
 
 	}
 
