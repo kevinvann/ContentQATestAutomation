@@ -160,7 +160,7 @@ public class GUI {
 					JOptionPane.showMessageDialog(frmContentQaTesting, "Invalid Directory");
 				} else {
 
-					TestFolders folder = new TestFolders(
+					UpdateFolder folder = new UpdateFolder(
 							folderPath + "\\" + testTypeCombo.getSelectedItem().toString());
 					try {
 						folder.moveReducedFiles();
@@ -223,7 +223,7 @@ public class GUI {
 					}
 					tweInstance1.goToBatchCalculation();
 					try {
-						tweInstance1.runFunctionalTests(0);
+						tweInstance1.runInputTests(0);
 					} catch (AWTException e) {
 						e.printStackTrace();
 					} catch (InterruptedException e) {
@@ -303,7 +303,7 @@ public class GUI {
 		JButton btnLoadReady = new JButton("Load Entered");
 		btnLoadReady.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				loadRegressionTest("twecontentdev1", 8380, 2);
+				loadRegressionTest("twecontentdev1", 8480, 2);
 			}
 		});
 		btnLoadReady.setBounds(255, 87, 118, 25);
@@ -384,7 +384,11 @@ public class GUI {
 			}
 			tweInstance1.goToBatchCalculation();
 			try {
-				tweInstance1.runRegressionTests(type);
+				try {
+					tweInstance1.runInputTests(type);
+				} catch (AWTException e) {
+					e.printStackTrace();
+				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

@@ -6,7 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
-public class TestFolders {
+public class UpdateFolder {
 
 	File inputFolder;
 	File outputFolder;
@@ -17,7 +17,7 @@ public class TestFolders {
 	private File[] listOfInputFiles;
 	private File[] listOfOutputFiles;
 
-	public TestFolders(String folderPath) {
+	public UpdateFolder(String folderPath) {
 		inputFolderPath = folderPath + "\\Inputs";
 		outputFolderPath = folderPath + "\\Outputs";
 		reducedFolderPath = folderPath + "\\Reduced";

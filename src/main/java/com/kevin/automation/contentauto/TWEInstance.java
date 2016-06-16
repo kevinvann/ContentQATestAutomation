@@ -6,9 +6,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.interactions.Actions;
 import java.awt.AWTException;
-import java.awt.Robot;
-import java.awt.Toolkit;
-import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 
 public class TWEInstance {
@@ -17,18 +14,16 @@ public class TWEInstance {
 	private String calculationWindow;
 	int port;
 	String server;
-	Robot robot;
-	TestFolders testFolder;
+	UpdateFolder testTypeFolder;
 
 	public TWEInstance(String folderPath, String server, int port) throws AWTException {
+		new KeyCommands();
 		this.port = port;
 		this.server = server;
-		testFolder = new TestFolders(folderPath);
-		robot = new Robot();
+		testTypeFolder = new UpdateFolder(folderPath);
 		driver = new InternetExplorerDriver();
 		driver.get("http://" + server + ":" + port + "/Twe/welcome.do");
 	}
-
 
 	public void logIn() {
 		driver.findElement(By.name("userName")).sendKeys("Admin");
@@ -47,96 +42,65 @@ public class TWEInstance {
 		driver.findElement(By.xpath("//a[@id='TAX_CALC_BATCH_IMG']")).sendKeys("\n");
 	}
 
-	public void runFunctionalTests(int type) throws AWTException, InterruptedException {
+	public void runInputTests(int type) throws AWTException, InterruptedException {
 		String inputFilePath;
-		for (int fileIndex = 0; fileIndex < testFolder.getNumInputItems(); fileIndex++) {
-			inputFilePath = testFolder.getInputFilePath(fileIndex);
-			if (inputFilePath.endsWith(".csv")) {
+		String inputFileName;
+		for (int fileIndex = 0; fileIndex < testTypeFolder.getNumInputItems(); fileIndex++) {
+			inputFilePath = testTypeFolder.getInputFilePath(fileIndex);
+			inputFileName = testTypeFolder.getInputFileName(fileIndex);
+			if (inputFilePath.endsWith(".csv") && !inputFilePath.endsWith("SSTSmokeTest.csv")) {
 				driver.switchTo().window(calculationWindow);
 				driver.switchTo().frame("body");
 				driver.switchTo().frame("content");
+				
 				Thread.sleep(800);
+				
 				selectFileUpload();
+				
 				Thread.sleep(200);
-				copyInputFilePath(inputFilePath);
-				paste();
-				keyPressEnter();
+				
+				KeyCommands.copyToClipboard(inputFilePath);
+				KeyCommands.ctrlV();
+				KeyCommands.enter();
+				
 				Thread.sleep(800);
-				System.out.println("\nRunning test for " + testFolder.getInputFileName(fileIndex) + "...");
+				
+				System.out.println("\nRunning test for " + inputFileName + "...");
 				submitAndWait();
+				
 				Thread.sleep(200);
-				keyPressA();
-				copyOutputFilePathFrom(testFolder.getInputFileName(fileIndex), type);
+				
+				KeyCommands.a();
+				KeyCommands.copyToClipboard(testTypeFolder.convertToOutputFilePath(inputFileName, type));
+				
 				Thread.sleep(700);
-				paste();
-				keyPressEnter();
+				
+				KeyCommands.ctrlV();
+				KeyCommands.enter();
+				
 				Thread.sleep(500);
-				robot.keyPress(KeyEvent.VK_Y);
-				robot.keyRelease(KeyEvent.VK_Y);
+				
+				KeyCommands.robot.keyPress(KeyEvent.VK_Y);
+				KeyCommands.robot.keyRelease(KeyEvent.VK_Y);
+				
 				Thread.sleep(900);
-				System.out.println("Saved to: " + testFolder.convertToOutputFilePath(testFolder.getInputFileName(fileIndex), type));
+				
+				System.out.println("Saved to: "
+						+ testTypeFolder.convertToOutputFilePath(inputFileName, type));
 
 			} else {
-				System.out.println(testFolder.getInputFileName(fileIndex) + " is not an input csv file.");
-			}
-		}
-		driver.quit();
-	}
-	
-	public void runRegressionTests(int type) throws InterruptedException {
-		String inputFilePath;
-		for (int fileIndex = 0; fileIndex < testFolder.getNumInputItems(); fileIndex++) {
-			inputFilePath = testFolder.getInputFilePath(fileIndex);
-			if (inputFilePath.endsWith(".in.csv")) {
-				driver.switchTo().window(calculationWindow);
-				driver.switchTo().frame("body");
-				driver.switchTo().frame("content");
-				Thread.sleep(800);
-				selectFileUpload();
-				Thread.sleep(200);
-				copyInputFilePath(inputFilePath);
-				paste();
-				keyPressEnter();
-				Thread.sleep(800);
-				System.out.println("\nRunning test for " + testFolder.getInputFileName(fileIndex) + "...");
-				submitAndWait();
-				Thread.sleep(200);
-				keyPressA();
-				copyOutputFilePathFrom(testFolder.getInputFileName(fileIndex), type);
-				Thread.sleep(700);
-				paste();
-				keyPressEnter();
-				Thread.sleep(500);
-				robot.keyPress(KeyEvent.VK_Y);
-				robot.keyRelease(KeyEvent.VK_Y);
-				Thread.sleep(900);
-				System.out.println("Saved to: " + testFolder.convertToOutputFilePath(testFolder.getInputFileName(fileIndex), type));
-
-			} else {
-				System.out.println(testFolder.getInputFileName(fileIndex) + " is not an input csv file.");
+				System.out.println(inputFileName + " is not an input csv file.");
 			}
 		}
 		driver.quit();
 	}
 	
 	
+	
+	
+	
+	
 
-	private void keyPressA() {
-		robot.keyPress(KeyEvent.VK_A);
-		robot.keyRelease(KeyEvent.VK_A);
-	}
-
-	private void copyOutputFilePathFrom(String inputFileName, int type) {
-		StringSelection copyOutput = new StringSelection(testFolder.convertToOutputFilePath(inputFileName, type));
-		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(copyOutput, null);
-	}
-
-	private String copyInputFilePath(String inputFile) {
-		String inputPathName = inputFile;
-		StringSelection copyInput = new StringSelection(inputPathName);
-		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(copyInput, null);
-		return inputPathName;
-	}
 
 	private void submitAndWait() throws InterruptedException {
 		driver.findElement(By.xpath("//input[@class='buttonred']")).click();
@@ -144,18 +108,6 @@ public class TWEInstance {
 		while (driver.getPageSource().length() > 0) {
 			Thread.sleep(1000);
 		}
-	}
-
-	private void keyPressEnter() {
-		robot.keyPress(KeyEvent.VK_ENTER);
-		robot.keyRelease(KeyEvent.VK_ENTER);
-	}
-
-	private void paste() {
-		robot.keyPress(KeyEvent.VK_CONTROL);
-		robot.keyPress(KeyEvent.VK_V);
-		robot.keyRelease(KeyEvent.VK_V);
-		robot.keyRelease(KeyEvent.VK_CONTROL);
 	}
 
 	private void selectFileUpload() {
