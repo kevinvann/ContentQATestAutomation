@@ -59,7 +59,7 @@ public class TestFolders {
 	public String convertToOutputFilePath(String inputFileName, int type) {
 		StringBuffer strBuffer = new StringBuffer(inputFileName);
 		String temp;
-		String typeString[] = { "", "_Ready", "_Entered", "_LCS_Inc_84i", "_LCS_Master_84m", "_LCS_SST_Inc_84ssti" };
+		String typeString[] = { "", "_READY", "_ENTERED", "_LCS_Inc_84i", "_LCS_Master_84m", "_LCS_SST_Inc_84ssti" };
 		int index = 0;
 		if (inputFileName.contains("StaticTestSuite")) {
 			for (index = 0; index < 3; index++) {

@@ -28,6 +28,12 @@ public class TWEGenerator {
 		} catch (IOException e) {
 
 		}
+		
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void createCriterionTests(String date, String version, String criterionInPath) throws IOException {
@@ -61,6 +67,12 @@ public class TWEGenerator {
 		keyPressTab(1);
 		keyPressEnter();
 
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
 		int x = 0;
 		for (int i = 0; i < tweFolder.listFiles().length ; i++) {
 			System.out.println(tweFolder.list()[i].toString());

@@ -47,7 +47,7 @@ public class TWEInstance {
 		driver.findElement(By.xpath("//a[@id='TAX_CALC_BATCH_IMG']")).sendKeys("\n");
 	}
 
-	public void runInputTests(int type) throws AWTException, InterruptedException {
+	public void runFunctionalTests(int type) throws AWTException, InterruptedException {
 		String inputFilePath;
 		for (int fileIndex = 0; fileIndex < testFolder.getNumInputItems(); fileIndex++) {
 			inputFilePath = testFolder.getInputFilePath(fileIndex);

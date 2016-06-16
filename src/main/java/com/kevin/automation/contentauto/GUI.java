@@ -129,15 +129,15 @@ public class GUI {
 				"New Codes\\BF", "Updated Codes\\BF", "Rates Changes\\BF" }));
 
 		JButton runTestsButton = new JButton("Load Tests");
-		runTestsButton.setBounds(216, 57, 145, 36);
+		runTestsButton.setBounds(226, 57, 145, 36);
 		panelFunctional.add(runTestsButton);
 
 		JButton shrinkFilesButton = new JButton("Shrink Files");
-		shrinkFilesButton.setBounds(216, 110, 145, 36);
+		shrinkFilesButton.setBounds(226, 112, 145, 36);
 		panelFunctional.add(shrinkFilesButton);
 
 		JButton moveReducedButton = new JButton("Move Reduced");
-		moveReducedButton.setBounds(216, 163, 145, 36);
+		moveReducedButton.setBounds(226, 164, 145, 36);
 		panelFunctional.add(moveReducedButton);
 
 		textFieldServer = new JTextField();
@@ -223,7 +223,7 @@ public class GUI {
 					}
 					tweInstance1.goToBatchCalculation();
 					try {
-						tweInstance1.runInputTests(0);
+						tweInstance1.runFunctionalTests(0);
 					} catch (AWTException e) {
 						e.printStackTrace();
 					} catch (InterruptedException e) {
@@ -294,7 +294,7 @@ public class GUI {
 		JButton btnLoadEntered = new JButton("Load Ready");
 		btnLoadEntered.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				loadRegressionTest("twecontentdev1", 8380, 1);
+				loadRegressionTest("twecontentdev1", 8480, 1);
 			}
 		});
 		btnLoadEntered.setBounds(255, 113, 118, 25);
