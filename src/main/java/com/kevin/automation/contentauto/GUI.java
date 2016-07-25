@@ -294,7 +294,7 @@ public class GUI {
 		JButton btnLoadEntered = new JButton("Load Ready");
 		btnLoadEntered.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				loadRegressionTest("twecontentdev1", 8480, 1);
+				loadRegressionTest("twecontentdev1", 8380, 1);
 			}
 		});
 		btnLoadEntered.setBounds(255, 113, 118, 25);
@@ -303,7 +303,7 @@ public class GUI {
 		JButton btnLoadReady = new JButton("Load Entered");
 		btnLoadReady.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				loadRegressionTest("twecontentdev1", 8480, 2);
+				loadRegressionTest("twecontentdev1", 8380, 2);
 			}
 		});
 		btnLoadReady.setBounds(255, 87, 118, 25);

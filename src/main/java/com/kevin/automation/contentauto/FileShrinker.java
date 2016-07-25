@@ -32,25 +32,24 @@ public class FileShrinker {
 			if (outputFilePath.endsWith(".csv") && !outputFilePath.endsWith("_Reduced.csv")) {
 				KeyCommands.enter();
 				KeyCommands.copyToClipboard(outputFilePath);
-				
+
 				Thread.sleep(500);
-				
+
 				KeyCommands.ctrlV();
-				
+
 				Thread.sleep(500);
-				
+
 				KeyCommands.enter();
 				KeyCommands.tab(1);
 				KeyCommands.enter();
-				
+
 				Thread.sleep(2000);
-				
+
 				KeyCommands.enter();
 				KeyCommands.tab(7);
 			}
 		}
 		KeyCommands.altF4();
 	}
-
 
 }
