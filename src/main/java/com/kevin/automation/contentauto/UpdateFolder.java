@@ -109,6 +109,7 @@ public class UpdateFolder {
 		}
 		return count;
 	}
+	
 
 	public void moveReducedFiles() throws IOException {
 		for (int y = 0; y < getNumOutputItems(); y++) {

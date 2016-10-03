@@ -1,6 +1,7 @@
 package com.kevin.automation.contentauto;
 
 import java.awt.AWTException;
+import java.io.File;
 import java.io.IOException;
 
 public class FileShrinker {
@@ -30,26 +31,36 @@ public class FileShrinker {
 		for (int i = 0; i < outputFolder.getNumOutputItems(); i++) {
 			outputFilePath = outputFolder.getOutputFilePath(i);
 			if (outputFilePath.endsWith(".csv") && !outputFilePath.endsWith("_Reduced.csv")) {
-				KeyCommands.enter();
-				KeyCommands.copyToClipboard(outputFilePath);
 
-				Thread.sleep(500);
+				
 
-				KeyCommands.ctrlV();
+				if (new File(outputFolder.convertToReducedFilePath(outputFolder.getOutputFileName(i)).replaceFirst(".csv", "_Reduced.csv")).exists()) {
+					System.out.println(outputFolder.convertToReducedFilePath(outputFolder.getOutputFileName(i))
+							+ " already exists");
+				} else {
+					KeyCommands.enter();
+					KeyCommands.copyToClipboard(outputFilePath);
 
-				Thread.sleep(500);
+					Thread.sleep(500);
 
-				KeyCommands.enter();
-				KeyCommands.tab(1);
-				KeyCommands.enter();
+					KeyCommands.ctrlV();
 
-				Thread.sleep(2000);
+					Thread.sleep(500);
 
-				KeyCommands.enter();
-				KeyCommands.tab(7);
+					KeyCommands.enter();
+					KeyCommands.tab(1);
+					KeyCommands.enter();
+
+					Thread.sleep(2000);
+
+					KeyCommands.enter();
+					KeyCommands.tab(7);
+
+				}
 			}
 		}
 		KeyCommands.altF4();
+
 	}
 
 }

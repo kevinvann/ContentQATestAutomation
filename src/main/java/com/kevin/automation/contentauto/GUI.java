@@ -269,7 +269,7 @@ public class GUI {
 				}
 			}
 		});
-		btnCreateCriterionTest.setBounds(12, 149, 184, 38);
+		btnCreateCriterionTest.setBounds(12, 149, 184, 25);
 		panelRegression.add(btnCreateCriterionTest);
 
 		final JButton btnBrowseGenPath = new JButton("Browse Generator Folder");
@@ -363,6 +363,38 @@ public class GUI {
 		});
 		btn84ssti.setBounds(255, 192, 118, 25);
 		panelRegression.add(btn84ssti);
+		
+		JButton btnMoveCrit = new JButton("Move Criterion Tests");
+		btnMoveCrit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TWEGenerator tweGen = null;
+				if (textFieldDate.getText().equals("") || textFieldTWE.getText().equals("")) {
+					JOptionPane.showMessageDialog(frmContentQaTesting, "Please enter required fields");
+				} else if (!new File(folderPath + "\\Regression\\Criterion Tests\\Inputs").exists()) {
+					JOptionPane.showMessageDialog(frmContentQaTesting, "Invalid test folder");
+				} else if (!new File(genPath + "\\TWE Generator V.4.exe").exists()) {
+					JOptionPane.showMessageDialog(frmContentQaTesting, "Could not find 'Tax Generator V.4.exe'");
+				} else {
+					try {
+						tweGen = new TWEGenerator(genPath);
+					} catch (AWTException e1) {
+						e1.printStackTrace();
+					}
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e1) {
+						e1.printStackTrace();
+					}
+					try {
+						tweGen.moveAndRename(textFieldDate.getText(), textFieldTWE.getText(), folderPath + "\\Regression\\Criterion Tests\\Inputs");
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}
+			}
+		});
+		btnMoveCrit.setBounds(12, 187, 184, 25);
+		panelRegression.add(btnMoveCrit);
 
 	}
 

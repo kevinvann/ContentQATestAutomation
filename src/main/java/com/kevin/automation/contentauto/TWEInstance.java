@@ -7,6 +7,7 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.interactions.Actions;
 import java.awt.AWTException;
 import java.awt.event.KeyEvent;
+import java.io.File;
 
 public class TWEInstance {
 
@@ -49,44 +50,49 @@ public class TWEInstance {
 			inputFilePath = testTypeFolder.getInputFilePath(fileIndex);
 			inputFileName = testTypeFolder.getInputFileName(fileIndex);
 			if (inputFilePath.endsWith(".csv") && !inputFilePath.endsWith("SSTSmokeTest.csv")) {
-				driver.switchTo().window(calculationWindow);
-				driver.switchTo().frame("body");
-				driver.switchTo().frame("content");
-				
-				Thread.sleep(800);
-				
-				selectFileUpload();
-				
-				Thread.sleep(200);
-				
-				KeyCommands.copyToClipboard(inputFilePath);
-				KeyCommands.ctrlV();
-				KeyCommands.enter();
-				
-				Thread.sleep(800);
-				
-				System.out.println("\nRunning test for " + inputFileName + "...");
-				submitAndWait();
-				
-				Thread.sleep(200);
-				
-				KeyCommands.a();
-				KeyCommands.copyToClipboard(testTypeFolder.convertToOutputFilePath(inputFileName, type));
-				
-				Thread.sleep(700);
-				
-				KeyCommands.ctrlV();
-				KeyCommands.enter();
-				
-				Thread.sleep(500);
-				
-				KeyCommands.robot.keyPress(KeyEvent.VK_Y);
-				KeyCommands.robot.keyRelease(KeyEvent.VK_Y);
-				
-				Thread.sleep(900);
-				
-				System.out.println("Saved to: "
-						+ testTypeFolder.convertToOutputFilePath(inputFileName, type));
+				if (new File(testTypeFolder.convertToOutputFilePath(inputFileName, type)).exists()) {
+					System.out.println(testTypeFolder.convertToOutputFilePath(inputFileName, type) + " already exists");
+				} else {
+					driver.switchTo().window(calculationWindow);
+					driver.switchTo().frame("body");
+					driver.switchTo().frame("content");
+
+					Thread.sleep(800);
+
+					selectFileUpload();
+
+					Thread.sleep(200);
+
+					KeyCommands.copyToClipboard(inputFilePath);
+					KeyCommands.ctrlV();
+					KeyCommands.enter();
+
+					Thread.sleep(800);
+
+					System.out.println("\nRunning test for " + inputFileName + "...");
+
+					submitAndWait();
+
+					Thread.sleep(200);
+
+					KeyCommands.a();
+					KeyCommands.copyToClipboard(testTypeFolder.convertToOutputFilePath(inputFileName, type));
+
+					Thread.sleep(700);
+
+					KeyCommands.ctrlV();
+					KeyCommands.enter();
+
+					Thread.sleep(500);
+
+
+					System.out.println("Waiting for " + testTypeFolder.convertToOutputFilePath(inputFileName, type) + " to finish downloading...");
+					while (!new File(testTypeFolder.convertToOutputFilePath(inputFileName, type)).exists()) {
+						Thread.sleep(1000);
+					}
+
+					System.out.println("Saved to: " + testTypeFolder.convertToOutputFilePath(inputFileName, type));
+				}
 
 			} else {
 				System.out.println(inputFileName + " is not an input csv file.");
@@ -94,13 +100,6 @@ public class TWEInstance {
 		}
 		driver.quit();
 	}
-	
-	
-	
-	
-	
-	
-
 
 	private void submitAndWait() throws InterruptedException {
 		driver.findElement(By.xpath("//input[@class='buttonred']")).click();

@@ -41,7 +41,7 @@ public class TWEGenerator {
 		KeyCommands.tab(1);
 		KeyCommands.space();
 		KeyCommands.tab(12);
-		KeyCommands.copyToClipboard("1000.00");
+		KeyCommands.copyToClipboard("10000.00");
 		
 		try {
 			Thread.sleep(500);
@@ -70,7 +70,10 @@ public class TWEGenerator {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
+
+	}
+	
+	public void moveAndRename(String date, String version, String criterionInPath) throws IOException {
 		int x = 0;
 		for (int i = 0; i < tweFolder.listFiles().length ; i++) {
 			System.out.println(tweFolder.list()[i].toString());
@@ -83,7 +86,6 @@ public class TWEGenerator {
 				x++;
 			}
 		}
-
 	}
 
 	
