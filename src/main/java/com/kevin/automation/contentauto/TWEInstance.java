@@ -1,12 +1,12 @@
-package com.kevin.automation.contentauto;
+// This class contains methods to control a TWE instance to run tests through the TWE UI
 
+package com.kevin.automation.contentauto;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.interactions.Actions;
 import java.awt.AWTException;
-import java.awt.event.KeyEvent;
 import java.io.File;
 
 public class TWEInstance {

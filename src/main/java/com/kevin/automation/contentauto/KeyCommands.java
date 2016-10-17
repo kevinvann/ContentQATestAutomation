@@ -1,3 +1,5 @@
+// This class contains the methods that provide shortcuts to key presses to be used in other classes
+
 package com.kevin.automation.contentauto;
 import java.awt.AWTException;
 import java.awt.Robot;

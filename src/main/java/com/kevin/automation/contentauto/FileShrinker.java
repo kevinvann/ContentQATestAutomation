@@ -1,5 +1,6 @@
-package com.kevin.automation.contentauto;
+// This class controls the File Shrinker V1.3.exe application to shrink files that are in the update folder
 
+package com.kevin.automation.contentauto;
 import java.awt.AWTException;
 import java.io.File;
 import java.io.IOException;

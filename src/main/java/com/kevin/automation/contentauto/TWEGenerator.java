@@ -1,5 +1,6 @@
-package com.kevin.automation.contentauto;
+// This class deals with controlling the TWE Generator V.4.exe application to create criterion tests
 
+package com.kevin.automation.contentauto;
 import java.awt.AWTException;
 import java.io.File;
 import java.io.IOException;
@@ -73,6 +74,8 @@ public class TWEGenerator {
 
 	}
 	
+	
+	// Method to move criterion tests that were made from the Generator folder to the update folder
 	public void moveAndRename(String date, String version, String criterionInPath) throws IOException {
 		int x = 0;
 		for (int i = 0; i < tweFolder.listFiles().length ; i++) {

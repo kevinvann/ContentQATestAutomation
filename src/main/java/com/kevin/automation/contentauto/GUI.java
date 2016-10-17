@@ -16,22 +16,22 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JFileChooser;
-import java.awt.Rectangle;
 import javax.swing.JTabbedPane;
 import javax.swing.JPanel;
-import java.awt.Font;
+import javax.swing.JSeparator;
+import javax.swing.JCheckBox;
 
 public class GUI {
 
 	private JFrame frmContentQaTesting;
 	String folderPath;
-	JLabel lblTweVersion;
 	String genPath;
 	private JTextField textFieldDate;
 	private JTextField textFieldGenPath;
 	private JTextField textFieldTWE;
 	private JTextField textFieldServer;
 	private JTextField textFieldPort;
+	private JTextField textUpdatePath;
 
 	/**
 	 * Launch the application.
@@ -72,39 +72,30 @@ public class GUI {
 
 		frmContentQaTesting = new JFrame();
 		frmContentQaTesting.setResizable(false);
-		frmContentQaTesting.setBounds(new Rectangle(2000, 100, 394, 351));
+		frmContentQaTesting.setBounds(200, 200, 394, 351);
 		frmContentQaTesting.setTitle("TWE Automation");
 		frmContentQaTesting.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frmContentQaTesting.getContentPane().setLayout(null);
 
 		final JButton btnBrowseTestFolder = new JButton("Browse");
-		btnBrowseTestFolder.setBounds(12, 275, 96, 29);
+		btnBrowseTestFolder.setBounds(10, 279, 36, 25);
 		frmContentQaTesting.getContentPane().add(btnBrowseTestFolder);
 		btnBrowseTestFolder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser fileChooser = new JFileChooser();
-				fileChooser.setCurrentDirectory(new File("C:\\Users\\kevin.vann\\Desktop"));
+				fileChooser.setCurrentDirectory(new File("T:\\WIL\\Departments\\TaxContentQA\\Test Artifacts & Results\\TWE Content Update"));
 				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 				int response = fileChooser.showOpenDialog(btnBrowseTestFolder);
 				if (response == JFileChooser.APPROVE_OPTION) {
 					folderPath = fileChooser.getSelectedFile().toString();
-					lblTweVersion.setText("v" + fileChooser.getSelectedFile().getName().substring(0, 4));
+					textUpdatePath.setText(folderPath.toString());
 				} else {
 					folderPath = "";
-					lblTweVersion.setText("");
+					textUpdatePath.setText("");
 				}
 			}
 
 		});
-
-		JLabel lblTestFolder = new JLabel("Test Folder:");
-		lblTestFolder.setBounds(218, 281, 70, 16);
-		frmContentQaTesting.getContentPane().add(lblTestFolder);
-
-		lblTweVersion = new JLabel("");
-		lblTweVersion.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblTweVersion.setBounds(300, 281, 76, 16);
-		frmContentQaTesting.getContentPane().add(lblTweVersion);
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(0, 0, 390, 260);
@@ -115,75 +106,107 @@ public class GUI {
 		panelFunctional.setLayout(null);
 
 		JLabel lblTweServer = new JLabel("TWE Server:");
-		lblTweServer.setBounds(12, 45, 84, 16);
+		lblTweServer.setBounds(12, 29, 84, 25);
 		panelFunctional.add(lblTweServer);
 
-		final JLabel lblTaxType = new JLabel("Tax Type:");
-		lblTaxType.setBounds(12, 109, 58, 16);
+		final JLabel lblTaxType = new JLabel("Update Document Type:");
+		lblTaxType.setBounds(12, 102, 152, 16);
 		panelFunctional.add(lblTaxType);
 
-		final JComboBox<?> testTypeCombo = new JComboBox();
-		testTypeCombo.setBounds(12, 128, 163, 22);
-		panelFunctional.add(testTypeCombo);
-		testTypeCombo.setModel(new DefaultComboBoxModel(new String[] { "New Codes", "Updated Codes", "Rates Changes",
+		final JComboBox<?> comboUpdateDocType = new JComboBox();
+		comboUpdateDocType.setBounds(12, 125, 163, 22);
+		panelFunctional.add(comboUpdateDocType);
+		comboUpdateDocType.setModel(new DefaultComboBoxModel(new String[] { "New Codes", "Updated Codes", "Rates Changes",
 				"New Codes\\BF", "Updated Codes\\BF", "Rates Changes\\BF" }));
 
-		JButton runTestsButton = new JButton("Load Tests");
-		runTestsButton.setBounds(226, 57, 145, 36);
-		panelFunctional.add(runTestsButton);
+		final JButton btnRunTests = new JButton("Run Tests");
+		btnRunTests.setBounds(226, 54, 145, 25);
+		panelFunctional.add(btnRunTests);
 
-		JButton shrinkFilesButton = new JButton("Shrink Files");
-		shrinkFilesButton.setBounds(226, 112, 145, 36);
-		panelFunctional.add(shrinkFilesButton);
+		final JButton btnShrinkFiles = new JButton("Shrink Files");
+		btnShrinkFiles.setBounds(226, 92, 145, 25);
+		panelFunctional.add(btnShrinkFiles);
 
-		JButton moveReducedButton = new JButton("Move Reduced");
-		moveReducedButton.setBounds(226, 164, 145, 36);
-		panelFunctional.add(moveReducedButton);
+		final JButton btnMoveReduced = new JButton("Move Reduced");
+		btnMoveReduced.setBounds(226, 130, 145, 25);
+		panelFunctional.add(btnMoveReduced);
 
 		textFieldServer = new JTextField();
-		textFieldServer.setBounds(12, 64, 106, 22);
+		textFieldServer.setBounds(12, 55, 106, 22);
 		panelFunctional.add(textFieldServer);
 		textFieldServer.setColumns(10);
 
 		textFieldPort = new JTextField();
-		textFieldPort.setBounds(130, 64, 45, 22);
+		textFieldPort.setBounds(130, 55, 45, 22);
 		panelFunctional.add(textFieldPort);
 		textFieldPort.setColumns(10);
 
 		JLabel lblPort = new JLabel("Port:");
-		lblPort.setBounds(130, 45, 56, 16);
+		lblPort.setBounds(130, 29, 56, 25);
 		panelFunctional.add(lblPort);
-		moveReducedButton.addActionListener(new ActionListener() {
+		
+		final JCheckBox chckbxBf = new JCheckBox("BF");
+		chckbxBf.setBounds(226, 187, 43, 25);
+		panelFunctional.add(chckbxBf);
+		
+		JButton btnRunAll = new JButton("Run All");
+		btnRunAll.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int i = 0;
+				if(chckbxBf.isSelected()) {
+					i = 3;
+				}
+				for(int x = i; x < i + 3; x++) {
+				comboUpdateDocType.setSelectedIndex(x);
+				btnRunTests.doClick();
+				btnShrinkFiles.doClick();
+				btnMoveReduced.doClick();
+				}
+				JOptionPane.showMessageDialog(frmContentQaTesting, "Process Completed");
+			}
+		});
+		btnRunAll.setBounds(272, 181, 99, 36);
+		panelFunctional.add(btnRunAll);
+		
+		JLabel lblRunByDocType = new JLabel("Run by Update Doc Type:");
+		lblRunByDocType.setBounds(226, 29, 145, 16);
+		panelFunctional.add(lblRunByDocType);
+		
+		JSeparator separator = new JSeparator();
+		separator.setBounds(226, 171, 145, 8);
+		panelFunctional.add(separator);
+		
+
+		btnMoveReduced.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				if (!new File(folderPath + "\\" + testTypeCombo.getSelectedItem().toString()).exists()) {
+				if (!new File(folderPath + "\\" + comboUpdateDocType.getSelectedItem().toString()).exists()) {
 					JOptionPane.showMessageDialog(frmContentQaTesting, "Invalid Directory");
 				} else {
 
 					UpdateFolder folder = new UpdateFolder(
-							folderPath + "\\" + testTypeCombo.getSelectedItem().toString());
+							folderPath + "\\" + comboUpdateDocType.getSelectedItem().toString());
 					try {
 						folder.moveReducedFiles();
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
-					JOptionPane.showMessageDialog(frmContentQaTesting, "Moving Reduced Files Complete");
 				}
 
 			}
 		});
-		shrinkFilesButton.addActionListener(new ActionListener() {
+		btnShrinkFiles.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
-				if (!new File(folderPath + "\\" + testTypeCombo.getSelectedItem().toString()).exists()) {
+				if (!new File(folderPath + "\\" + comboUpdateDocType.getSelectedItem().toString()).exists()) {
 					JOptionPane.showMessageDialog(frmContentQaTesting, "Invalid Directory");
-				} else if (!new File(folderPath + "\\" + testTypeCombo.getSelectedItem().toString()
+				} else if (!new File(folderPath + "\\" + comboUpdateDocType.getSelectedItem().toString()
 						+ "\\Outputs\\File Shrinker V1.3.exe").exists()) {
 					JOptionPane.showMessageDialog(frmContentQaTesting, "Could not find 'File Shrink V1.3.exe'");
 				} else {
 					FileShrinker fileShrink = null;
 					try {
-						fileShrink = new FileShrinker(folderPath + "\\" + testTypeCombo.getSelectedItem().toString());
+						fileShrink = new FileShrinker(folderPath + "\\" + comboUpdateDocType.getSelectedItem().toString());
 					} catch (AWTException e) {
 						e.printStackTrace();
 					}
@@ -195,14 +218,14 @@ public class GUI {
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					JOptionPane.showMessageDialog(frmContentQaTesting, "File Shrinking Complete");
 				}
 			}
 		});
-		runTestsButton.addActionListener(new ActionListener() {
+		btnRunTests.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (!new File(folderPath + "\\" + testTypeCombo.getSelectedItem().toString()).exists()) {
+				if (!new File(folderPath + "\\" + comboUpdateDocType.getSelectedItem().toString()).exists()) {
 					JOptionPane.showMessageDialog(frmContentQaTesting, "Invalid Directory");
+					System.exit(1);
 				} else if (textFieldServer.getText().isEmpty() || textFieldPort.getText().isEmpty()) {
 					JOptionPane.showMessageDialog(frmContentQaTesting, "Please enter required fields");
 				}
@@ -210,7 +233,7 @@ public class GUI {
 				else {
 					TWEInstance tweInstance1 = null;
 					try {
-						tweInstance1 = new TWEInstance(folderPath + "\\" + testTypeCombo.getSelectedItem().toString(),
+						tweInstance1 = new TWEInstance(folderPath + "\\" + comboUpdateDocType.getSelectedItem().toString(),
 								textFieldServer.getText(), Integer.parseInt(textFieldPort.getText()));
 					} catch (AWTException e) {
 						e.printStackTrace();
@@ -229,7 +252,6 @@ public class GUI {
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					JOptionPane.showMessageDialog(frmContentQaTesting, "Test Loading Complete");
 				}
 
 			}
@@ -288,26 +310,26 @@ public class GUI {
 				}
 			}
 		});
-		btnBrowseGenPath.setBounds(337, 45, 36, 25);
+		btnBrowseGenPath.setBounds(337, 50, 36, 25);
 		panelRegression.add(btnBrowseGenPath);
 
-		JButton btnLoadEntered = new JButton("Load Ready");
-		btnLoadEntered.addActionListener(new ActionListener() {
+		JButton btnRunReady = new JButton("Run Ready");
+		btnRunReady.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				loadRegressionTest("twecontentdev1", 8380, 1);
 			}
 		});
-		btnLoadEntered.setBounds(255, 113, 118, 25);
-		panelRegression.add(btnLoadEntered);
+		btnRunReady.setBounds(255, 113, 118, 25);
+		panelRegression.add(btnRunReady);
 
-		JButton btnLoadReady = new JButton("Load Entered");
-		btnLoadReady.addActionListener(new ActionListener() {
+		JButton btnRunEntered = new JButton("Run Entered");
+		btnRunEntered.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				loadRegressionTest("twecontentdev1", 8380, 2);
 			}
 		});
-		btnLoadReady.setBounds(255, 87, 118, 25);
-		panelRegression.add(btnLoadReady);
+		btnRunEntered.setBounds(255, 87, 118, 25);
+		panelRegression.add(btnRunEntered);
 
 		textFieldDate = new JTextField();
 		textFieldDate.setBounds(12, 114, 116, 22);
@@ -320,7 +342,7 @@ public class GUI {
 
 		textFieldGenPath = new JTextField();
 		textFieldGenPath.setEditable(false);
-		textFieldGenPath.setBounds(12, 46, 318, 22);
+		textFieldGenPath.setBounds(12, 50, 318, 25);
 		panelRegression.add(textFieldGenPath);
 		textFieldGenPath.setColumns(10);
 
@@ -334,10 +356,10 @@ public class GUI {
 		textFieldTWE.setColumns(10);
 
 		JLabel lblGeneratorPath = new JLabel("Test Generator Path:");
-		lblGeneratorPath.setBounds(12, 25, 128, 16);
+		lblGeneratorPath.setBounds(12, 28, 128, 16);
 		panelRegression.add(lblGeneratorPath);
 
-		JButton btn84i = new JButton("Load 84i");
+		JButton btn84i = new JButton("Run 84i");
 		btn84i.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				loadRegressionTest("twecontentdev2", 8380, 3);
@@ -346,7 +368,7 @@ public class GUI {
 		btn84i.setBounds(255, 139, 118, 25);
 		panelRegression.add(btn84i);
 
-		JButton btn84m = new JButton("Load 84m");
+		JButton btn84m = new JButton("Run 84m");
 		btn84m.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				loadRegressionTest("twecontentdev2", 8480, 4);
@@ -355,7 +377,7 @@ public class GUI {
 		btn84m.setBounds(255, 165, 118, 25);
 		panelRegression.add(btn84m);
 
-		JButton btn84ssti = new JButton("Load 84ssti");
+		JButton btn84ssti = new JButton("Run 84ssti");
 		btn84ssti.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				loadRegressionTest("twecontentdev2", 8580, 5);
@@ -395,6 +417,12 @@ public class GUI {
 		});
 		btnMoveCrit.setBounds(12, 187, 184, 25);
 		panelRegression.add(btnMoveCrit);
+		
+		textUpdatePath = new JTextField();
+		textUpdatePath.setEditable(false);
+		textUpdatePath.setBounds(60, 279, 314, 25);
+		frmContentQaTesting.getContentPane().add(textUpdatePath);
+		textUpdatePath.setColumns(10);
 
 	}
 

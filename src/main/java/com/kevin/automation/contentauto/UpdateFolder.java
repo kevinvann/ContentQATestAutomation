@@ -1,5 +1,6 @@
-package com.kevin.automation.contentauto;
+// This class interacts with the update folder where the test cases are being saved to and where the input tests are located
 
+package com.kevin.automation.contentauto;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
